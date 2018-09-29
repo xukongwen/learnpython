@@ -55,7 +55,7 @@ def huangdou():
         e,y,y,y,y,y,y,e,
         e,y,e,e,e,e,y,e,
         e,y,y,e,e,y,y,e,
-        e,y,e,e,e,e,y,e,
+        e,y,e,y,y,e,y,e,
         e,y,y,y,y,y,y,e,
         e,e,e,e,e,e,e,e
         ]
@@ -66,7 +66,7 @@ def huangdou():
         e,y,y,y,y,y,y,e,
         e,y,e,e,e,e,y,e,
         e,y,e,e,e,e,y,e,
-        e,y,e,e,e,e,y,e,
+        e,y,e,y,y,e,y,e,
         e,y,y,y,y,y,y,e,
         e,e,e,e,e,e,e,e
         ]
