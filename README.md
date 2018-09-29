@@ -6,3 +6,5 @@ learn python and github
 
 喜欢python
 最近的打算是做一个文字RPG，验证这一周的学习。
+
+ddd
