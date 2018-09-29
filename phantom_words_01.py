@@ -5,6 +5,12 @@
 
 # 版本2.0
 
+from sense_hat import SenseHat
+import time
+
+sense = SenseHat()
+
+
 import random
 
 #初始化一个随机的HP
