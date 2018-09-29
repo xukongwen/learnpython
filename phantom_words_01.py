@@ -5,7 +5,7 @@
 
 # 版本2.0.2
 
-from sense_hat import SenseHat
+from sense_hat import SenseHat # 8*8 pixel 
 import time
 
 sense = SenseHat()
@@ -25,6 +25,9 @@ def attack_com():
     global c_hp #如果要调用全局变量，就要这样写，然后下面可以写对她的修改
     c_hp=c_hp-damage
     print("对敌人造成%d点伤害"%damage)
+    huangdou_attack(damage)
+    huangdou()
+    
 
 #显示双方最开始的HP
 def show_allhp_start():
@@ -35,6 +38,51 @@ def show_allhp_start():
 #显示双方现在的HP
 def show_allhp_rightnow():
     print("敌人HP：%d，玩家HP：%d"%(c_hp,u_hp))
+
+# draw xiaohuangdou
+def huangdou():
+    p = (204, 0, 204) #pink
+    g = (0,102,102) # green
+    w=(200,200,200) # white 
+    y=(204,204,0) #yellow
+    e=(0,0,0)
+
+    #sense.show_message("PHANTOM")
+
+    pet1=[
+        e, e, y, e, e, y, e, e,
+        e,e,y,e,e,y,e,e,
+        e,y,y,y,y,y,y,e,
+        e,y,e,e,e,e,y,e,
+        e,y,y,e,e,y,y,e,
+        e,y,e,e,e,e,y,e,
+        e,y,y,y,y,y,y,e,
+        e,e,e,e,e,e,e,e
+        ]
+
+    pet2=[
+        e, e, y, e, e, y, e, e,
+        e,e,y,e,e,y,e,e,
+        e,y,y,y,y,y,y,e,
+        e,y,e,e,e,e,y,e,
+        e,y,e,e,e,e,y,e,
+        e,y,e,e,e,e,y,e,
+        e,y,y,y,y,y,y,e,
+        e,e,e,e,e,e,e,e
+        ]
+
+    for i in range(10):
+        sense.set_pixels(pet1)
+        time.sleep(0.1)
+        sense.set_pixels(pet2)
+        time.sleep(0.1)
+
+    sense.clear()
+
+# this is show attack 
+def huangdou_attack(hp): 
+    red=(255,0,0)
+    sense.show_message("%d"%hp, text_colour=red)
 
 
 int_allhp()
@@ -59,5 +107,10 @@ show_allhp_start()
 
 attack_com()
 show_allhp_rightnow()
+
+temp=sense.get_temperature()
+
+print(temp)
+
 
    
