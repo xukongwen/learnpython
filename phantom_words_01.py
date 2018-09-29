@@ -18,21 +18,38 @@ def attack_com():
     damage = random.randint(1,5)
     global c_hp #如果要调用全局变量，就要这样写，然后下面可以写对她的修改
     c_hp=c_hp-damage
-    print("对敌人造成%d伤害"%damage)
+    print("对敌人造成%d点伤害"%damage)
 
 #显示双方最开始的HP
 def show_allhp_start():
     #com_hp,user_hp = int_allhp()
     print("命运之轮开始旋转，世界初始化如下：\n")
-    print("敌人血：%d,玩家血：%d"%(c_hp,u_hp))
+    print("敌人初始HP：%d,玩家初始HP：%d"%(c_hp,u_hp))
 
 #显示双方现在的HP
 def show_allhp_rightnow():
-    print("敌人血量：%d，玩家血量：%d"%(c_hp,u_hp))
+    print("敌人HP：%d，玩家HP：%d"%(c_hp,u_hp))
 
 
 int_allhp()
 c_hp,u_hp=int_allhp() #游戏里必须有一个敌人和玩家的全局变量，否则没法弄，也没法存档
+print("""
+000000000000000000000000000000000000000
+000000000000000000000000000000000000000
+1111111111welcome to PHANTOM os11111111
+1111111111欢迎来到灵魂石模拟器 11111111
+000000000000000000000000000000000000000
+000000000000000000000000000000000000000
+
+        你不知道你是谁
+        也没人知道你是谁
+-----------------------------------------
+""")
+
+
+
+
 show_allhp_start()
+
 attack_com()
 show_allhp_rightnow()

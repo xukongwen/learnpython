@@ -1,7 +1,8 @@
-# -- coding: utf-8 --
-a = []
-a.append(2)
-a.append("ok")
+from flask import Flask
+app = Flask('app')
 
+@app.route('/')
+def hello_world():
+  return 'Hello, World!'
 
-print(a)
+app.run(host='0.0.0.0', port=8080)

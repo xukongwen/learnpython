@@ -28,8 +28,8 @@ def 打印双方结果(computer,user): #函数竟然可以用中文命名，太�
     print("电脑是：%d，而你是：%d"%(computer,user))
 
 def int_allhp():
-    computer_hp=random.randint(10,20)
-    player_hp=random.randint(10,20)
+    computer_hp = random.randint(10,20)
+    player_hp = random.randint(10,20)
 
 def print_allhp(computer_hp,player_hp):
     print("电脑HP：%d,你的HP：%d"%(computer_hp,player_hp))
