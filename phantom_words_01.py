@@ -53,3 +53,5 @@ show_allhp_start()
 
 attack_com()
 show_allhp_rightnow()
+
+   
