@@ -3,7 +3,7 @@
 # 昨天是1.0，今天开始各种加工，看能不能成为一个文字RPG游戏
 
 
-# 版本2.0
+# 版本2.0.2
 
 from sense_hat import SenseHat
 import time
