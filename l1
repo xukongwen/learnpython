@@ -1,0 +1,4 @@
+# -- coding: utf-8 --
+
+message="这很好"
+print(message)
