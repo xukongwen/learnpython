@@ -3,9 +3,9 @@
 # 昨天是1.0，今天开始各种加工，看能不能成为一个文字RPG游戏
 
 
-# 版本2.0.2
+# 版本2.0.3
 
-from sense_hat import SenseHat # 8*8 pixel 
+from sense_hat import SenseHat # 8*8 pixel
 import time
 
 sense = SenseHat()
@@ -27,7 +27,7 @@ def attack_com():
     print("对敌人造成%d点伤害"%damage)
     huangdou_attack(damage)
     huangdou()
-    
+
 
 #显示双方最开始的HP
 def show_allhp_start():
@@ -43,7 +43,7 @@ def show_allhp_rightnow():
 def huangdou():
     p = (204, 0, 204) #pink
     g = (0,102,102) # green
-    w=(200,200,200) # white 
+    w=(200,200,200) # white
     y=(204,204,0) #yellow
     e=(0,0,0)
 
@@ -79,8 +79,8 @@ def huangdou():
 
     sense.clear()
 
-# this is show attack 
-def huangdou_attack(hp): 
+# this is show attack
+def huangdou_attack(hp):
     red=(255,0,0)
     sense.show_message("%d"%hp, text_colour=red)
 
@@ -111,6 +111,3 @@ show_allhp_rightnow()
 temp=sense.get_temperature()
 
 print(temp)
-
-
-   
