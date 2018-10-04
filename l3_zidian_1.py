@@ -25,6 +25,7 @@ sinitang_0={
     }
 #print('%s的组成:'%sinitang_0['name'])
 
+
 for key,value in sinitang_0.items():#.items()是取出{}里的key以及value
     print ("key is:",key)
     print('value is:',value)
