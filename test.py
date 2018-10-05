@@ -1,5 +1,5 @@
 
-def testbag ():
+def test_bag_jian ():
 
     score = 3
     class_list = {'apple':30}
@@ -19,4 +19,18 @@ def testbag ():
 
         print(class_list)
 
-testbag()
+
+def test_bag_add ():
+
+    score = 0
+    class_list = {'apple':30}
+    while True:
+        name = input()
+
+        score = score + 1
+
+        class_list[name] = score
+
+        print(class_list)
+
+test_bag_add()

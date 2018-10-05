@@ -1,4 +1,5 @@
 # -- coding: utf-8 --
+#学习python的文字游戏
 
 #拥有的所有药材和数量
 allyao={
@@ -23,7 +24,7 @@ guizhitang_0={
     '芍药':10,
     '大枣':10,
     }
-#所有方剂的名称
+#所有的方剂
 allfang={
     '四逆汤':sinitang_0,
     '桂枝汤':guizhitang_0,
@@ -47,7 +48,8 @@ n = 0
 
 #游戏主体开始
 while True:#最常用的命令输入循环
-#下面这一段是非常重要的,对于一个文字输入游戏来说,可以判断输入的命令和命令的对象!(深挖的话可以制作出类似dos那种系统)
+#下面这一段是非常重要的,对于一个文字输入游戏来说,
+#可以判断输入的命令和命令的对象!(深挖的话可以制作出类似dos那种系统)
     command = input('输入>').split()#这个是个逆天神技,其实主要是将输入分组了,后面可以直接调用组内的命令
 
     if len(command) == 0:
@@ -97,20 +99,20 @@ while True:#最常用的命令输入循环
             canBeMade = True
 
             for yao in allfang[item]:
-                if allfang[item][yao] > allyao[yao]:
+                if allfang[item][yao] > allyao[yao]:#库存要足够
                     print('药材不足,无法制作')
                     canBeMade = False
                     break
 
             if canBeMade == True:
                 for yao in allfang[item]:
-                    allyao[yao] -= allfang[item][yao]
+                    allyao[yao] -= allfang[item][yao]#从背包里减去制作需要的
                     if allyao[yao] <= 0:#判断如果没有了,就直接从背包里删除掉
                         del allyao[yao]
                         #print('删除')
 
-                n=n+1
+                allyao[item] = n+1
 
-                allyao[item] = n
+
 
                 print('制作成功')
