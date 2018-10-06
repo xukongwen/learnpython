@@ -2,8 +2,17 @@
 #学习class
 
 #类可以定义类的特定属性,以及内部可运行的各种函数(功能)
-import time;
+import time
 import random
+import csv
+
+#读取csv列表
+with open('list1.csv','r') as f:
+    reader = csv.reader(f)
+    my_list = list(reader)
+    final_list = my_list[1:]#把第一行切掉
+
+print(final_list)
 
 player_inventory = []
 
@@ -61,11 +70,6 @@ def randname():
     return new_random_name
 
 
-#randname()
-#p=randname()
-#print(p)
-
-
 
 class Pig():
     #定义类的各种属性
@@ -98,11 +102,11 @@ class Item():
         self.weight = random.randint(0,51)
         output_info = self.name+':'+'价格:'+str(self.price)+" "+"重量:"+str(self.weight)
         return output_info
-
+#Item的子类大剑
 class Great_sword(Item):
     def __init__(self,name,price,weight,rare,durable):
         super().__init__(name,price,weight,rare,durable)
-        self.sowrdname = '大剑'
+        self.sowrdname = '大剑'#子类独特的记号
 
     def onename(self):
         one_name = self.sowrdname
@@ -112,9 +116,16 @@ class Great_sword(Item):
         self.durable = self.durable + 10
         return self.durable
 
+#如果做出了修改,那么储存为新的物品组
     def update_info(self):
+        new_name = self.name
+        new_price = self.price
+        new_weigth = self.weight
+        new_rare = self.rare
         new_durable = self.durable
-        return new_durable
+        new_item_list = [new_name,new_price,new_weigth,new_rare,new_durable]
+        return new_item_list
+
 
 
 
@@ -166,12 +177,13 @@ print(my_sowrd.onename())#显示独特名称
 my_sowrd.add_durable()#修改耐久
 print(my_sowrd.update_info())
 
-
+#向玩家背包存放一个大剑(修改过耐久的新大剑)
+player_inventory.append(my_sowrd.update_info())
+print('玩家的背包',my_sowrd.onename(),player_inventory)
 
 
 
 #lootbox()
-
 
 
 
