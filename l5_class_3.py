@@ -14,18 +14,19 @@ with open('list1.csv','r') as f:
 
 print(final_list)
 
+# 忽略这里,是胡闹的
 class Dao():
     def __init__(self):
         pass
 
 class Yin(Dao):
     def __init__(self):
-        super.__init__():
+        super.__init__()
         pass
 
 class Yang(Dao):
     def __init__(self):
-        super.__init__():
+        super.__init__()
         pass
 
 
@@ -42,5 +43,20 @@ class Sword(Item):
         super.__init__(name,num,type)
         attack = att
         durable = dur
+        weight = wei
+        price = pri
+
+    def fix():
+        durable = durable + 10
+
+class Herbs(Item):
+    def __init__(self,name,num,type):
+        super.__init__(name,num,type)
+        useage = use
+        price = pri
+
+    def eat():
+        print('+10HP')
+
 
     
