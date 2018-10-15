@@ -2,6 +2,7 @@
 
 import pygame as pp
 import sys
+import pickle
 
 #下面是设定游戏窗口相关
 class display_init():
@@ -37,6 +38,8 @@ class Grid():
         self.rects = []
         self.sc = sc
         self.num = num
+        self.load_s = False
+        self.flag = True
 
         #创建所有格子
         for x in range(self.num):
@@ -67,10 +70,83 @@ class Grid():
                 self.rects[self.selected].y = event.pos[1] + self.selected_offset_y 
     #画出格子
     def draw_grid(self):
-        for b in self.rects:
+        if self.load_s == True and self.flag:
+            self.flag = False
+            pickle_in = open("saves/save_2","rb")
+            load_file = pickle.load(pickle_in)
+            self.rects = load_file
+            for b in self.rects:
+                pp.draw.rect(self.sc, self.b_color, b)
+                #print(self.rects)
+        if self.load_s != True:
+            self.flag = True
+        else:
+            for b in self.rects:
+                pp.draw.rect(self.sc, self.b_color, b)
+
+    def load_grid(self):
+        pickle_in = open("saves/save_2","rb")
+        load_file = pickle.load(pickle_in)
+        #print("load",load_file)
+        self.load_s = True
+        for b in load_file:
             pp.draw.rect(self.sc, self.b_color, b)
+
+    def save_grid(self):
+        pickle_out = open("saves/save_2","wb")
+        pickle.dump(self.rects, pickle_out)
+        #print("save",self.rects)
+        pickle_out.close()
+
         
 
+
+#按钮的本尊
+class Button(object):
+    def __init__(self, pos, size, color, h_color,text):
+
+        self.image_normal = pp.Surface(size)
+        self.image_normal.fill(color)
+
+        self.image = self.image_normal
+        self.rect = pp.Rect((0,0),size)
+    
+        self.image_hovered = pp.Surface(size)
+        self.image_hovered.fill(h_color)
+
+        font = pp.font.Font(None,32)
+        text = font.render(text, True,(0,0,0))
+        text_rect = text.get_rect()
+        text_rect.center = self.rect.center
+
+        self.image_normal.blit(text, text_rect)
+        self.image_hovered.blit(text, text_rect)
+
+        self.rect.topleft = pos
+
+        self.hovered = False
+        self.clicked = False
+
+    def update(self):#更新鼠标划过状态
+        if self.hovered:
+            self.image = self.image_hovered
+        else:
+            self.image = self.image_normal
+
+
+    def draw(self, screen):#画按钮
+        screen.blit(self.image, self.rect)
+
+    def is_clicked(self, event):
+        if event.type == pp.MOUSEMOTION:
+            self.hovered = self.rect.collidepoint(event.pos)
+        elif event.type == pp.MOUSEBUTTONDOWN:
+            if self.hovered:
+            
+            #if event.button == 1:
+                
+                return self.rect.collidepoint(event.pos)#事件
+                
 
 
 
