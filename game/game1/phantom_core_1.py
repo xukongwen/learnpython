@@ -4,6 +4,8 @@ import pygame as pp
 import sys
 import pickle
 
+#-------------------------------------------类就是上帝创世区域,全部是抽象设计,没有实体--------------------------------------------------------------------------
+
 #下面是设定游戏窗口相关
 class display_init():
     def __init__(self,w,h):
@@ -68,7 +70,12 @@ class Grid():
             if self.selected is not None: 
                 self.rects[self.selected].x = event.pos[0] + self.selected_offset_x
                 self.rects[self.selected].y = event.pos[1] + self.selected_offset_y 
-    #画出格子
+                #if self.rects[self.selected].x > 700:
+                #print(self.selected, self.rects[self.selected])
+
+        
+
+    #画出格子,根据读档
     def draw_grid(self):
         if self.load_s == True and self.flag:
             self.flag = False
@@ -77,26 +84,36 @@ class Grid():
             self.rects = load_file
             for b in self.rects:
                 pp.draw.rect(self.sc, self.b_color, b)
-                #print(self.rects)
+               
         if self.load_s != True:
             self.flag = True
         else:
             for b in self.rects:
-                pp.draw.rect(self.sc, self.b_color, b)
+                if b.x > 700 and b.y < 500:
+                    #self.b_color = (255,0,0)
+                    #print(b)
+                    pp.draw.rect(self.sc, (255,0,0),b)
+                elif b.y > 500 and b.x > 700:
+                    pp.draw.rect(self.sc, ( 0,  0, 255),b)
+                else: 
+                    pp.draw.rect(self.sc, self.b_color, b)
 
+    #读档功能
     def load_grid(self):
         pickle_in = open("saves/save_2","rb")
         load_file = pickle.load(pickle_in)
-        #print("load",load_file)
+        
         self.load_s = True
         for b in load_file:
             pp.draw.rect(self.sc, self.b_color, b)
 
+    #储存功能
     def save_grid(self):
         pickle_out = open("saves/save_2","wb")
         pickle.dump(self.rects, pickle_out)
-        #print("save",self.rects)
+       
         pickle_out.close()
+
 
         
 

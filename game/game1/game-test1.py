@@ -24,6 +24,7 @@ grid2.load_grid()
 
 #-------------------------游戏循环主体,用各种event,让各种子民交互起来,这里是世界舞台--------------------------------------------
 
+
 is_running = True
 #这里是游戏循环事件区域
 while is_running:
@@ -46,7 +47,7 @@ while is_running:
                 grid2.save_grid()
                 print('saved!')
              
-    
+        
 
     #---------------这里是游戏渲染区域-------------------
     #填充白色背景
@@ -59,6 +60,7 @@ while is_running:
     #画出格子
     #grid1.draw_grid()
     grid2.draw_grid()
+    pp.draw.line(screen2.screen, screen2.BLACK, [700,50],[700,950],1)
     
     
      #更新整体画面  
