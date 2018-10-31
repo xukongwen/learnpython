@@ -121,6 +121,9 @@ class Grid():
 
 
 class Moveable():
+    def __init__(self, ho=False):
+        self.ho = ho
+
     def handle_event(self, event):
         #global redrawing
 
@@ -145,6 +148,10 @@ class Moveable():
 
         if event.type == pp.MOUSEMOTION:
             self.hover = self.rect.collidepoint(event.pos)
+            if self.hover:
+                self.ho = True
+                #self.win()
+                
             
             if self.movable and self.moving:
                 self.rect.move_ip(event.rel)
@@ -156,45 +163,71 @@ class Moveable():
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
+    def win(self):
+        if self.hover:
+            print('hi')
+            self.rect = pp.Rect(100, 200, 300, 300)
+            self.image = pp.Surface((300,300))
+            self.image.fill((255,0,0)) 
+            pp.draw.rect(self.image,(255,0,0),self.rect)
+
+
 
 class Box(Moveable):
-    def __init__(self,x,y,w,h,color=(0, 100, 255)):
+    def __init__(self,x,y,w,h,color=(0, 100, 255),item_list=[],ho=False):
         self.hover = True
         self.color = color
         self.rect = pp.Rect(x, y, w, h)
         self.image = pp.Surface((w,h))
         self.image.fill(self.color)
+        self.item_list = item_list
+        self.ho = ho
         
         self.moving = False
         self.movable = True
 
+        
+    
         pp.draw.rect(self.image, self.color, self.rect)
 
 
+
+
+
 class Window(Moveable):
-    def __init__(self, x, y, width, height, movable=True, color=(0,0,0), text='ok', text_color=(0,0,0)):
+    def __init__(self, x, y, width, height, movable=True, color=(0,0,0), text_list=[], text_color=(0,0,0)):
         self.hover = True
         self.moving = False
         self.movable = movable
         self.color = color
-        self.text = text 
         self.text_color = text_color
+        row = 5
 
-        self.rect = pp.Rect(x, y, width, height)
+        self.rect = pp.Rect(x, y, width, row+95)
         self.image = pp.Surface((width,height))
         self.image.fill(self.color) 
         
         self.x = x
         self.y = y
-        self.font = pp.font.Font('华文宋体.ttf', 26)
+        self.font = pp.font.Font('华文宋体.ttf', 25)
         self.width =width
         self.height = height
+        self.text_list = text_list
 
-        pp.draw.rect(self.image, self.color, self.rect) 
-        text_image = self.font.render(self.text, True, self.text_color)
-        text_rect = text_image.get_rect()
-        self.image.blit(text_image, (10, 5, *text_rect.size))
-    
+        for i in self.text_list:#我草这里竟然成功了！这里是把list中的属性按行分别读出来然后显示出来
+            for j in i:
+                text_image = self.font.render(str(j), True, self.text_color)
+                text_rect = text_image.get_rect()
+                row += 35
+                self.image.blit(text_image, (10, row ,*text_rect.size))
+
+        pp.draw.rect(self.image,self.color,self.rect)
+
+
+
+        
+        
+        
 
 
 
@@ -343,10 +376,10 @@ class Loot_box():
         self.item_list = item_list#这里输入是一个列表,就可以同时输入n个物品!
         self.item_num = item_num
         self.loot_box = []#本箱子的最终list
-        self.make_item()
+        
         
 
-    def make_item(self):
+    def make_item(self,final_list):
         for i in self.item_list:#根据输入的list,把物品装入
             temp_item = Item(*final_list[int(i)])#类里面可以调用其他的类,这里是展开list列表,填入属性
             self.loot_box.append(temp_item.info())#加入根据编号的物品进入箱子
