@@ -121,18 +121,16 @@ class Grid():
 
 
 class Moveable():
-    def __init__(self, ho=False):
-        self.ho = ho
+    #def __init__(self):
 
     def handle_event(self, event):
-        #global redrawing
 
         if event.type == pp.MOUSEBUTTONDOWN:
             if self.hover:
                 if event.button == 1:
                     if self.movable:
                         self.moving = True
-                       # redrawing = True
+                       
                         return True
                 elif event.button == 3:
                     print(self.rect.topleft)
@@ -143,58 +141,50 @@ class Moveable():
             if self.hover:
                 if self.movable and self.moving:
                     self.moving = False
-                    #redrawing = True
+                  
                     return True
 
         if event.type == pp.MOUSEMOTION:
             self.hover = self.rect.collidepoint(event.pos)
-            if self.hover:
-                self.ho = True
-                #self.win()
+            self.pos = event.pos
                 
-            
             if self.movable and self.moving:
                 self.rect.move_ip(event.rel)
-                #print(event.rel[0])
-                #self.x = self.x + event.rel[0]
-                #redrawing = True
+                
                 return True
 
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-
-    def win(self):
+    def info_win(self,screen):#根据情况是否显示信息块
+        self.screen = screen
         if self.hover:
-            print('hi')
-            self.rect = pp.Rect(100, 200, 300, 300)
-            self.image = pp.Surface((300,300))
-            self.image.fill((255,0,0)) 
-            pp.draw.rect(self.image,(255,0,0),self.rect)
-
+            #这里后面要写一些判断让信息块不要出荧幕
+            info_w1 = Info_win(self.rect.x+200,self.rect.y,500,400,False,(  0,   0, 255),self.item,(255, 255, 255))
+            info_w1.draw(self.screen)
+        else:
+            pass
 
 
 class Box(Moveable):
-    def __init__(self,x,y,w,h,color=(0, 100, 255),item_list=[],ho=False):
+    def __init__(self,x,y,w,h,color=(0, 100, 255),item=[]):
         self.hover = True
         self.color = color
         self.rect = pp.Rect(x, y, w, h)
         self.image = pp.Surface((w,h))
         self.image.fill(self.color)
-        self.item_list = item_list
-        self.ho = ho
-        
+        self.item = item
+    
         self.moving = False
         self.movable = True
 
         
     
         pp.draw.rect(self.image, self.color, self.rect)
+    
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
 
 
 
-
-
-class Window(Moveable):
+class Info_win(Moveable):
     def __init__(self, x, y, width, height, movable=True, color=(0,0,0), text_list=[], text_color=(0,0,0)):
         self.hover = True
         self.moving = False
@@ -209,25 +199,21 @@ class Window(Moveable):
         
         self.x = x
         self.y = y
-        self.font = pp.font.Font('华文宋体.ttf', 25)
+        self.font = pp.font.Font('华文宋体.ttf', 25)#中文字体需要这样写，而不是sys.font
         self.width =width
         self.height = height
         self.text_list = text_list
 
         for i in self.text_list:#我草这里竟然成功了！这里是把list中的属性按行分别读出来然后显示出来
-            for j in i:
-                text_image = self.font.render(str(j), True, self.text_color)
-                text_rect = text_image.get_rect()
-                row += 35
-                self.image.blit(text_image, (10, row ,*text_rect.size))
+            text_image = self.font.render(str(i), True, self.text_color)
+            text_rect = text_image.get_rect()
+            row += 35
+            self.image.blit(text_image, (10, row ,*text_rect.size))
 
         pp.draw.rect(self.image,self.color,self.rect)
-
-
-
-        
-        
-        
+    
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
 
 
 
@@ -376,8 +362,29 @@ class Loot_box():
         self.item_list = item_list#这里输入是一个列表,就可以同时输入n个物品!
         self.item_num = item_num
         self.loot_box = []#本箱子的最终list
+        self.d_box = []
         
-        
+
+    #box1 = pc.Box(300,300,100,100,screen2.Green)
+    def make_box(self):#制作物品gird清单
+        for i, r in enumerate(self.loot_box):
+            self.d_box.append(Box((100+i*60),300,50,50,(0, 255,   0),r))
+    
+    def draw_box(self, screen):#根据list数量画出物品
+        for d in self.d_box:
+            d.draw(screen)
+
+    def event_box(self,event):#给每个物品添加鼠标移动相关交互
+        for d in self.d_box:
+            d.handle_event(event)
+
+    def draw_infowin(self,screen):#这里以后改到box里面实现
+        for d in self.d_box:
+            d.info_win(screen)
+
+
+
+
 
     def make_item(self,final_list):
         for i in self.item_list:#根据输入的list,把物品装入

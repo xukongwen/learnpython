@@ -15,7 +15,11 @@ with open('lists/list2.csv','r') as f:
     final_list = my_list[1:]#把第一行切掉
 
     player_inventory = []
-    print(final_list)
+
+loot_box1 = pc.Loot_box([0,1,2],20)
+loot_box1.make_item(final_list)
+loot_box1.make_box()
+
 
 #---------------根据上帝的意志和概念创意,创建一切实例(子民),一个游戏或一个app就是实例的舞台,下面是孵化池-----------------------------------------------------
 
@@ -33,10 +37,9 @@ b_test = pc.Button((650,500),(150,50),screen2.Green,screen2.RED,"test1")
 grid2 = pc.Grid(9,50,300,300,2,screen2.Green,screen2.screen)
 
 box1 = pc.Box(300,300,100,100,screen2.Green)
-window1 = pc.Window(700,300,500,400,True,screen2.BLUE,'今者吾丧我',screen2.WHITE)
+#window1 = pc.Window(700,300,500,400,True,screen2.BLUE,loot_box1.loot_box,screen2.WHITE)
 
 player1 = pc.Player()
-
 
 grid2.load_grid()
 pp.display.set_caption("Phantom OS")
@@ -78,14 +81,15 @@ def test1():
                         is_running = False
 
                 box1.handle_event(event)
-                window1.handle_event(event)
+                loot_box1.event_box(event)
+                
         screen2.screen.fill(screen2.WHITE)
 
-        window1.draw(screen2.screen)
-        box1.draw(screen2.screen)
-        
 
-
+        loot_box1.draw_box(screen2.screen)
+        loot_box1.draw_infowin(screen2.screen)
+        #box1.info_win(screen2.screen)
+        #box1.draw(screen2.screen)
 
         pp.display.update()
         screen2.clock.tick(60)
