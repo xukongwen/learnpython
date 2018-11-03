@@ -1,4 +1,4 @@
-# -- coding: utf-8 --
+
 
 import pygame as pp
 import sys
@@ -116,9 +116,6 @@ class Grid():
        
         pickle_out.close()
 
-#需要一个移动（拖动）的父类
-#需要一个格子的夫类
-
 
 class Moveable():
     #def __init__(self):
@@ -175,8 +172,6 @@ class Box(Moveable):
         self.moving = False
         self.movable = True
 
-        
-    
         pp.draw.rect(self.image, self.color, self.rect)
     
     def draw(self, screen):
@@ -273,9 +268,53 @@ class Player():
         self.m_down = False
         self.m_left = False
         self.m_right = False
+        self.inv = []
+        self.d_box = []
+        self.is_update = False
+        self.flag = True
+
+
+    def open(self):#这里是当打开的时候让初始化和更新!
+        self.is_update = True
+        self.flag = True
+
+
+    def update_inv(self):
+        if self.is_update == True and self.flag:#是否初始化,或者叫更新
+            self.flag = False
+            self.d_box = []#这里必须先清空!否则不行!
+            for i, r in enumerate(self.inv):
+                self.d_box.append(Box((800+i*60),300,50,50,(0, 255,   0),r))
+        
+
+    def add_inv(self,item):
+        self.inv.append(item)
+        
+    def remove_inv(self,item):
+        self.inv.remove(item)
+       
+
+    def inv_event(self,event):
+        pass
+
+    def make_box(self):#制作物品gird清单
+        for i, r in enumerate(self.inv):
+            self.d_box.append(Box((800+i*60),300,50,50,(0, 255,   0),r))
+    
+    def draw_box(self, screen):#根据list数量画出物品,打开箱子后的东西
+        for d in self.d_box:
+            d.draw(screen)
+
+    def event_box(self,event):#给每个物品添加鼠标移动相关交互
+        for d in self.d_box:
+            d.handle_event(event)
+
+    def draw_infowin(self,screen):#这里以后改到box里面实现
+        for d in self.d_box:
+            d.info_win(screen)
       
 
-#接收键盘信息
+    #接收键盘信息
     def event_click(self,event):
             if event.type == pp.KEYDOWN:
                 if event.key == pp.K_UP:
@@ -297,7 +336,7 @@ class Player():
                 if event.key == pp.K_LEFT:
                     self.m_left = False
 
-#接受到开关信息后更新player的位置           
+    #接受到开关信息后更新player的位置           
     def update(self):
         if self.m_up == True:
             self.rect.y -= 10
@@ -318,10 +357,6 @@ class Player():
             self.rect.x += 10
             if self.rect.x > 1400:
                 self.rect.x = 0
-      
-
-
-
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -342,6 +377,7 @@ class Item():
         self.dur = dur  
         self.rare = rare
         self.player_dis = player_dis
+        self.item = [self.name,self.type,self.wuxing,self.n_name,self.num,self.weight,self.price,self.att,self.dur,self.rare,self.player_dis]
 
     def info(self):#存成一个自己的list
         item_info_list = [self.name,self.type,self.wuxing,self.n_name,self.num,self.weight,self.price,self.att,self.dur,self.rare,self.player_dis]
@@ -358,47 +394,121 @@ class Item():
 
 #写了一个箱子的类,用来事先存放东西,然后可以拿走,和放入
 class Loot_box():
-    def __init__(self,item_list,item_num):
+    def __init__(self,x,y, item_list,item_num,player):
         self.item_list = item_list#这里输入是一个列表,就可以同时输入n个物品!
         self.item_num = item_num
         self.loot_box = []#本箱子的最终list
         self.d_box = []
-        
+        self.player_box = []
+        self.x = x
+        self.y = y
+        self.rect = pp.Rect(x,y, 100, 100)
+        self.image = pp.Surface((100,100))
+        self.image.fill((255,0,0))
+        self.box_open = False
+        self.player = player
+        self.is_update = False
+        self.flag = True
 
-    #box1 = pc.Box(300,300,100,100,screen2.Green)
+
+    #----------------------------在场景操作箱子部分----------------------------------------------------------
+
+    def draw_self(self,screen):#在场景画出箱子自己
+        pp.draw.rect(self.image,(0,255,0),self.rect)
+        screen.blit(self.image, self.rect)
+    
+    def open(self):
+        self.is_update = True
+        self.flag = True
+
+    def open_box(self,rect,event):#打开箱子
+        if self.rect.colliderect(rect):#检测是否和玩家和箱子有碰撞
+            if event.type == pp.KEYDOWN:
+                if event.key == pp.K_e:
+                    self.box_open = True
+                    
+
+    #------------------------------打开箱子的部分------------------------------------------------------------
+
     def make_box(self):#制作物品gird清单
         for i, r in enumerate(self.loot_box):
             self.d_box.append(Box((100+i*60),300,50,50,(0, 255,   0),r))
-    
-    def draw_box(self, screen):#根据list数量画出物品
+
+    def update_box(self):
+        print('update')
+        if self.is_update == True and self.flag:#是否初始化,或者叫更新
+            self.flag = False
+            self.d_box = []#这里必须先清空!否则不行!
+            self.player.d_box=[]
+            
+            for i, r in enumerate(self.loot_box):
+                self.d_box.append(Box((100+i*60),300,50,50,(0, 255,   0),r))
+
+            for i, r in enumerate(self.player.inv):
+                self.player.d_box.append(Box((800+i*60),300,50,50,(0, 255,   0),r))#为草这里之前有一个超级不容易看出来的bug!
+            
+
+        
+    def draw_box(self, screen):#根据list数量画出物品,打开箱子后的东西
         for d in self.d_box:
+            d.draw(screen)
+        for d in self.player.d_box:
             d.draw(screen)
 
     def event_box(self,event):#给每个物品添加鼠标移动相关交互
         for d in self.d_box:
             d.handle_event(event)
+        for d in self.player.d_box:
+            d.handle_event(event)
 
     def draw_infowin(self,screen):#这里以后改到box里面实现
         for d in self.d_box:
             d.info_win(screen)
-
-
-
-
+        for d in self.player.d_box:
+            d.info_win(screen)
+       
 
     def make_item(self,final_list):
         for i in self.item_list:#根据输入的list,把物品装入
             temp_item = Item(*final_list[int(i)])#类里面可以调用其他的类,这里是展开list列表,填入属性
             self.loot_box.append(temp_item.info())#加入根据编号的物品进入箱子
 
-    def take_item(self):#拿走东西,并添加给玩家,一定要先给再删除
-        player_inventory.append(self.loot_box[2])
-        del self.loot_box[2]
+    def exchange(self,event):
+        for i, r in enumerate(self.loot_box):
+            if self.d_box[i].rect.x > 700 and event.type == pp.MOUSEBUTTONUP:#万岁!这里也改好了!必须同时满足这两个条件才行!
+                if event.button == 1:
+                    self.player.add_inv(r)
+                    self.remove_item(r)
+                    self.player.flag = True#让玩家背包更新
+                    self.player.open()#这个地方写的比较傻,后面要改
+                    self.player.update_inv()
+                    self.open()
+                    
+               
 
-    def add_item(self):#玩家向箱子添加
-        self.loot_box.append(player_inventory[0])
-        del player_inventory[0]
+        for i, r in enumerate(self.player.inv):
+            if self.player.d_box[i].rect.x < 700 and event.type == pp.MOUSEBUTTONUP:
+                
+                self.player.remove_inv(r)
+                self.add_item(r)
+                self.player.flag = True#让玩家背包更新
+                self.player.open()
+                self.player.update_inv()
+                self.open()
+                
 
+              
+
+    def remove_item(self,item):
+        self.loot_box.remove(item)
+
+
+    def add_item(self,item):
+        self.loot_box.append(item)
+
+            
+          
+            
     def show_boxname(self):
         boxname = 'box'
         return boxname
