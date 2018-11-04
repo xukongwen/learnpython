@@ -16,6 +16,10 @@ with open('lists/list2.csv','r') as f:
     final_list = my_list[1:]#把第一行切掉
 
 
+
+craft_list = ['四逆汤','甘草','干姜','附子']
+
+
 #---------------根据上帝的意志和概念创意,创建一切实例(子民),一个游戏或一个app就是实例的舞台,下面是孵化池-----------------------------------------------------
 
 #创建玩家1号
@@ -25,10 +29,11 @@ player1 = pc.Player()
 screen2 = pc.display_init(1400,1000)
 
 #创建箱子1号
-loot_box1 = pc.Loot_box(700,300,[0,1,2],20,player1)
+loot_box1 = pc.Loot_box(700,300,[0,1,2,3,4],20,player1)
 loot_box1.make_item(final_list)
 loot_box1.make_box()
 player1.make_box()
+craft_box1 = pc.Craft(700,300,[0,1,2,3,4],20,player1)
 
 
 #建立按钮实例
@@ -156,6 +161,20 @@ def open_loot_box():
         pp.display.update()
         screen2.clock.tick(60)
 
+def craft():
+    is_running = True
+    while is_running:
+        for event in pp.event.get():
+                if event.type == pp.QUIT:
+                    is_running = False
+                elif event.type == pp.KEYDOWN:
+                    if event.key == pp.K_ESCAPE:
+                        is_running = False
+                if button_closebox.is_clicked(event):
+                    is_running = False
+                    loot_box1.box_open = False#关闭箱子
+
+
 
 #实验的格子画画
 def draw():
@@ -234,6 +253,8 @@ def menu1():
 
         pp.display.update()
         screen2.clock.tick(60)
+
+
 
 
 
